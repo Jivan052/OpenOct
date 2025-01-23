@@ -101,7 +101,7 @@ const LandingPage = () => {
       {/* CTA Section */}
       <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Share Your Work?</h2>
+          <h2 className="text-3xl font-bold mb-4">Wanna to propose something new!</h2>
           <p className="text-xl text-gray-600 mb-8">
             Join our community and showcase your projects to the world
           </p>
