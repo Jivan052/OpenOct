@@ -1,3 +1,6 @@
+// Author: Jivan Jamdar ( @Jivan052 )
+// Date: 25-07-2021
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
