@@ -19,7 +19,7 @@ const Navbar = () => {
             className="flex items-center space-x-2 text-xl font-bold text-primary-600 hover:text-primary-700 transition-colors"
           >
             <FaCodeCompare className="text-2xl" />
-            <span className='text-2xl'>OpenUp</span>
+            <span className='text-2xl'>OpenOct</span>
           </Link>
           
           <div className="hidden md:flex space-x-4">
