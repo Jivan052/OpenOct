@@ -74,7 +74,7 @@ const AboutUs = () => {
                 <section className="mb-16 bg-white p-8 rounded-lg shadow-md">
                     <h2 className="text-3xl font-semibold mb-6 text-primary-600">Our Mission</h2>
                     <p className="text-lg text-gray-700 leading-relaxed">
-                        At OpenUp, we're dedicated to fostering innovation and collaboration 
+                        At OpenOct, we're dedicated to fostering innovation and collaboration 
                         within our community. Our mission is to provide a platform where creators can 
                         showcase their projects, connect with like-minded individuals, and inspire the 
                         next generation of developers.
@@ -107,7 +107,7 @@ const AboutUs = () => {
                             href="mailto:contact@projectshowcase.com" 
                             className="text-primary-600 hover:text-primary-700 font-medium"
                         >
-                            contact@openup.com
+                            contact@openoct.com
                         </a>
                     </div>
                 </section>
