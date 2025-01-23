@@ -9,7 +9,7 @@ function Footer() {
           <div className="mb-4 md:mb-0">
             <h3 className="text-xl font-bold">
               <FaCodeCompare className="inline-block mr-2" />
-              OpenUp</h3>
+              OpenOct</h3>
             <p className="text-gray-400">Showcasing amazing projects from our community</p>
           </div>
           
@@ -27,7 +27,7 @@ function Footer() {
         </div>
         
         <div className="mt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} OpenUp. All rights reserved by Open Source Club, PWIOI.</p>
+          <p>&copy; {new Date().getFullYear()} OpenOct. All rights reserved by Open Source Club, PWIOI.</p>
         </div>
       </div>
     </footer>
