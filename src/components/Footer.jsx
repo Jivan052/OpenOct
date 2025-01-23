@@ -20,7 +20,7 @@ function Footer() {
             <a href="about" className="hover:text-primary-400">
               ContactUs
             </a>
-            <a href="#" className="hover:text-primary-400">
+            <a href="https://github.com/Jivan052/OpenOct" className="hover:text-primary-400">
               <FaGithub className="inline-block text-3xl"/>
             </a>
           </div>
