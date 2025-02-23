@@ -3,12 +3,13 @@ import { toast } from 'react-hot-toast';
 import { db } from '../firebase'; // Firebase config
 import { collection, addDoc, query, onSnapshot, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { FaGithub, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
+import { BiSolidUpvote } from "react-icons/bi";
 
 function ProjectProposals() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [proposals, setProposals] = useState([]);
-
+  
   useEffect(() => {
     const q = query(collection(db, "proposals"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -93,14 +94,10 @@ function ProjectProposals() {
             </a>
             <br></br>
             <div className="flex items-center space-x-4">
-              <button onClick={() => handleVote(proposal.id, 'upvote')} className="text-green-500 hover:text-green-700">
-                <FaArrowUp />
+              <button onClick={() => handleVote(proposal.id, 'upvote')} className="text-xl text-green-500 hover:text-green-700">
+                <BiSolidUpvote />
               </button>
               <span>{proposal.upvotes}</span>
-              <button onClick={() => handleVote(proposal.id, 'downvote')} className="text-red-500 hover:text-red-700">
-                <FaArrowDown />
-              </button>
-              <span>{proposal.downvotes}</span>
             </div>
           </div>
         ))}
