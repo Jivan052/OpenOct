@@ -90,14 +90,6 @@ function ProjectsGrid() {
           >
             Web
           </button>
-          <button
-            className={`px-4 py-2 rounded-lg ${
-              filter === 'mobile' ? 'bg-primary-600 text-white' : 'bg-gray-200'
-            }`}
-            onClick={() => setFilter('mobile')}
-          >
-            Mobile
-          </button>
         </div>
       </div>
       

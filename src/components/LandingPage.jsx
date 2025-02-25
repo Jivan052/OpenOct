@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { FaGithub, FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
+import Button from '../reusables/Button';
 
 const LandingPage = () => {
   const latestProjects = [

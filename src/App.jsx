@@ -14,6 +14,7 @@ import AboutUs from './components/AboutUs';
 import BlogList from './components/BlogList';
 import AuthPage from './components/AuthPage';
 import ProfilePage from './components/ProfilePage';
+import FeedbackForm from './components/Feedback';
 
 function App() {
   return (
@@ -23,8 +24,9 @@ function App() {
         <main className="flex-grow container mx-auto px-4 py-8">
           <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/feedback" element={<FeedbackForm />} />  
           <Route path="/login" element={<AuthPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+           <Route path="/profile" element={<ProfilePage />} />
             <Route path="/submit" element={<ProjectSubmission />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/blog" element={<BlogList />} />
