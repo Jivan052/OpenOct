@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
-import Button from '../reusables/Button';
 
 const LandingPage = () => {
   const latestProjects = [
@@ -48,7 +47,6 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-
       {/* Latest Projects Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">

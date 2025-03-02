@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FaCodeCompare } from 'react-icons/fa6';
 import Button from '../reusables/Button';
+import Gittip from '../reusables/Gittip';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +36,9 @@ const Navbar = () => {
             <Link to="/login" className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
               Admin Login
             </Link>
+            <Link to="https://github.com/OpenOct-Guild" target="_blank" rel="noopener noreferrer">
+              <Gittip />
+            </Link>
             <Button as={Link} to="/submit" className="btn-primary">
               Submit Project
             </Button>
@@ -62,7 +66,6 @@ const Navbar = () => {
             <Link to="/submit" className="block px-4 py-2 border-t border-gray-300 hover:bg-gray-50">
               Submit Project
             </Link>
-          
           </div>
         )}
       </div>
