@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaCodeCompare, FaGithub } from 'react-icons/fa6';
+import { FaDiscord, FaWhatsapp } from "react-icons/fa";
 
 function Footer() {
   return (
@@ -25,6 +26,12 @@ function Footer() {
             </a>
             <a href="https://github.com/Jivan052/OpenOct" className="hover:text-primary-400">
               <FaGithub className="inline-block text-3xl"/>
+            </a>
+            <a href="/" className="hover:text-primary-400">
+              <FaDiscord className="inline-block text-3xl"/>
+            </a>
+            <a href="/" className="hover:text-primary-400">
+              <FaWhatsapp className="inline-block text-3xl"/>
             </a>
           </div>
         </div>
