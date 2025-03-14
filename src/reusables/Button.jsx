@@ -14,6 +14,7 @@ const StyledButton = styled.button`
   transition: all 0.3s ease-in-out;
   padding: 0.5rem 1.25rem;
   background-color: rgb(37, 112, 162);
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,54 +1,112 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 
 const LandingPage = () => {
-  const latestProjects = [
+  // Carousel slides data
+  const carouselSlides = [
     {
       id: 1,
-      title: "Project Management Tool",
-      description: "A collaborative tool for managing software projects",
-      image: "https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg",
-      tech: ["React", "Node.js", "MongoDB"]
+      title: "Showcase Amazing Projects",
+      description: "Connect, collaborate, and share your work with the community",
+      buttonText: "Submit Your Project",
+      buttonLink: "/submit",
+      bgClass: "from-primary-600 to-primary-800"
     },
     {
       id: 2,
-      title: "E-commerce Platform",
-      description: "Modern e-commerce solution with real-time updates",
-      image: "https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg",
-      tech: ["Next.js", "Express", "PostgreSQL"]
+      title: "Join Our Upcoming Events",
+      description: "Participate in hackathons, webinars, and coding challenges",
+      buttonText: "View Events",
+      buttonLink: "/events",
+      bgClass: "from-blue-600 to-purple-700"
     },
     {
       id: 3,
-      title: "Social Media Dashboard",
-      description: "Analytics dashboard for social media metrics",
-      image: "https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg",
-      tech: ["Vue.js", "Python", "Django"]
+      title: "Learn and Grow Together",
+      description: "Access resources, tutorials, and mentorship opportunities",
+      buttonText: "Explore Resources",
+      buttonLink: "/blog",
+      bgClass: "from-teal-500 to-emerald-700"
     }
   ];
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = carouselSlides.length;
+
+  // Auto-rotate carousel
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, 4000); 
+    
+    return () => clearTimeout(timer);
+  }, [currentSlide, totalSlides]);
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
+    const latestProjects = [
+      {
+        id: 1,
+        title: "Pencraft",
+        description: "PenCraft is a platform where users can share their stories and ideas with the world.",
+        image: "https://ik.imagekit.io/Jivan/1.png?updatedAt=1741976642250",
+        tech: ['HTML', 'CSS', 'JavaScript', 'TailwindCSS']
+      },
+      {
+        id: 2,
+        title: "DSA Hub",
+        description: "DSA Hub is a comprehensive platform designed to help you master data structures and algorithms.",
+        image: "https://ik.imagekit.io/Jivan/2.png?updatedAt=1741976642141",
+        tech: ['HTML', 'CSS', 'JavaScript']
+      },
+      {
+        id: 3,
+        title: "Playit",
+        description: "Playit is a modern web music player built with love and passion for music.",
+        image: "https://ik.imagekit.io/Jivan/3.png?updatedAt=1741976642257",
+        tech: ['HTML', 'CSS', 'JavaScript']
+      }
+    ];
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-lg">
+      {/* Hero Carousel */}
+      <div className={`bg-gradient-to-r ${carouselSlides[currentSlide].bgClass} text-white rounded-lg relative`}>
         <div className="container mx-auto px-4 py-20">
           <div className="max-w-2xl pl-4">
-            <h1 className="text-5xl font-bold mb-6">
-              Showcase Your Amazing Projects
+            <h1 className="text-5xl font-bold mb-6 transition-opacity duration-300">
+              {carouselSlides[currentSlide].title}
             </h1>
-            <p className="text-xl mb-8">
-              Connect, collaborate, and share your work with the community
+            <p className="text-xl mb-8 transition-opacity duration-300">
+              {carouselSlides[currentSlide].description}
             </p>
             <Link
-              to="/submit"
+              to={carouselSlides[currentSlide].buttonLink}
               className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
-              Submit Your Project
+              {carouselSlides[currentSlide].buttonText}
             </Link>
           </div>
         </div>
+
+        {/* Carousel Navigation */}
+        <div className="absolute left-0 right-0 bottom-4 flex justify-center space-x-2">
+          {carouselSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full ${currentSlide === index ? 'bg-white' : 'bg-white/50'}`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
-      {/* Latest Projects Section */}
-      <section className="py-16">
+
+ {/* Latest Projects Section */}
+ <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Latest Projects</h2>

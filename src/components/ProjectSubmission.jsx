@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { db } from '../firebase'; // Firebase config
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-// import * as XLSX from 'xlsx';
+import { collection, addDoc } from 'firebase/firestore';
+
 
 function ProjectSubmission() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -17,23 +17,6 @@ function ProjectSubmission() {
       console.error('Error saving data: ', error);
     }
   };
-
-  // const downloadExcel = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(collection(db, "projects"));
-  //     const projects = querySnapshot.docs.map(doc => doc.data());
-
-  //     const worksheet = XLSX.utils.json_to_sheet(projects);
-  //     const workbook = XLSX.utils.book_new();
-  //     XLSX.utils.book_append_sheet(workbook, worksheet, "Projects");
-
-  //     XLSX.writeFile(workbook, `projects_${Date.now()}.xlsx`);
-  //     toast.success('Excel file downloaded successfully!');
-  //   } catch (error) {
-  //     toast.error('Failed to download Excel file');
-  //     console.error('Error downloading Excel file: ', error);
-  //   }
-  // };
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -143,10 +126,6 @@ function ProjectSubmission() {
           Submit Project
         </button>
       </form>
-
-      {/* <button onClick={downloadExcel} className="btn-secondary w-full mt-4">
-        Download Excel
-      </button> */}
     </div>
   );
 }

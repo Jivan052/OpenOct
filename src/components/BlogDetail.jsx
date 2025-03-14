@@ -1,6 +1,6 @@
 
 // Future use: For creating indivisual blog detail page
-// Author: Jivan Jamdar ( @Jivan052 ) DATED: 2021-08-25
+// Author: Jivan Jamdar ( @Jivan052 ) DATE: 2021-08-25
 
 // <Route path="/blog/:id" element={<BlogDetail />} />
 

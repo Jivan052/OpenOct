@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { db } from '../firebase'; // Firebase config
-import { collection, addDoc, query, onSnapshot, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, query, onSnapshot, deleteDoc, doc, getDocs, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { FaGithub } from 'react-icons/fa';
 import { BiSolidUpvote } from "react-icons/bi";
@@ -9,19 +9,53 @@ import { BiSolidUpvote } from "react-icons/bi";
 function ProjectProposals() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [proposals, setProposals] = useState([]);
+  const [votedProposals, setVotedProposals] = useState({});
   
+  // Generate a unique device ID using fingerprinting
+  const getDeviceId = () => {
+    // Simple fingerprinting using available device info
+    const fingerprint = [
+      navigator.userAgent,
+      navigator.language,
+      screen.width,
+      screen.height,
+      new Date().getTimezoneOffset()
+    ].join('|');
+    
+    // Create a simple hash from the fingerprint
+    let hash = 0;
+    for (let i = 0; i < fingerprint.length; i++) {
+      const char = fingerprint.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return 'device_' + Math.abs(hash).toString(16);
+  };
+
+  const deviceId = getDeviceId();
+
   useEffect(() => {
     const q = query(collection(db, "proposals"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const proposalsData = [];
+      const userVotes = {};
+      
       querySnapshot.forEach((doc) => {
-        proposalsData.push({ ...doc.data(), id: doc.id });
+        const proposal = { ...doc.data(), id: doc.id };
+        proposalsData.push(proposal);
+        
+        // Check if current device has voted on this proposal
+        if (proposal.voters && proposal.voters.includes(deviceId)) {
+          userVotes[proposal.id] = true;
+        }
       });
+      
       setProposals(proposalsData.reverse());
+      setVotedProposals(userVotes);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [deviceId]);
 
   const onSubmit = async (data) => {
     try {
@@ -29,7 +63,15 @@ function ProjectProposals() {
       const expirationDate = new Date(createdAt);
       expirationDate.setDate(expirationDate.getDate() + 7);
 
-      await addDoc(collection(db, "proposals"), { ...data, createdAt, expirationDate, upvotes: 0, downvotes: 0 });
+      await addDoc(collection(db, "proposals"), { 
+        ...data, 
+        createdAt, 
+        expirationDate, 
+        upvotes: 0, 
+        downvotes: 0,
+        voters: [] // Array to track voters by device ID
+      });
+      
       toast.success('Proposal submitted successfully!');
       reset();
     } catch (error) {
@@ -39,24 +81,37 @@ function ProjectProposals() {
   };
 
   const handleVote = async (id, type) => {
-    const voteKey = `vote_${id}`;
-    const existingVote = sessionStorage.getItem(voteKey);
-
-    if (existingVote) {
-      toast.error('You have already voted on this proposal.');
+    // Check if user already voted on this proposal
+    if (votedProposals[id]) {
+      toast.error('You have already voted on this proposal');
       return;
     }
 
     try {
       const proposalRef = doc(db, "proposals", id);
       const proposal = proposals.find(p => p.id === id);
+      
+      // Update votes and add voter to array
       const updatedProposal = {
         ...proposal,
         upvotes: type === 'upvote' ? proposal.upvotes + 1 : proposal.upvotes,
         downvotes: type === 'downvote' ? proposal.downvotes + 1 : proposal.downvotes
       };
-      await updateDoc(proposalRef, updatedProposal);
-      sessionStorage.setItem(voteKey, type);
+      
+      // Update the document with atomic operations
+      await updateDoc(proposalRef, {
+        upvotes: updatedProposal.upvotes,
+        downvotes: updatedProposal.downvotes,
+        voters: arrayUnion(deviceId) // Add this device ID to voters array
+      });
+      
+      // Update local state to prevent multiple votes
+      setVotedProposals(prev => ({
+        ...prev,
+        [id]: true
+      }));
+      
+      toast.success('Vote recorded!');
     } catch (error) {
       toast.error('Failed to update vote');
       console.error('Error updating vote: ', error);
@@ -94,7 +149,13 @@ function ProjectProposals() {
             </a>
             <br></br>
             <div className="flex items-center space-x-4">
-              <button onClick={() => handleVote(proposal.id, 'upvote')} className="text-xl text-green-500 hover:text-green-700">
+              <button 
+                onClick={() => handleVote(proposal.id, 'upvote')} 
+                className={`text-xl ${votedProposals[proposal.id] 
+                  ? 'text-gray-400 cursor-not-allowed' 
+                  : 'text-green-500 hover:text-green-700'}`}
+                disabled={votedProposals[proposal.id]}
+              >
                 <BiSolidUpvote />
               </button>
               <span>{proposal.upvotes}</span>
