@@ -89,7 +89,7 @@ const Feature = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header section */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Feature Showcase</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">Idea Showcase</h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           Discover the features that make OpenOct great, and help shape its future by suggesting new ones.
         </p>
