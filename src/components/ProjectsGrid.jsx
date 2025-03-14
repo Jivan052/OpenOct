@@ -43,6 +43,7 @@ function ProjectsGrid() {
       contributors: ['OpenOct Guid org'],
       category: 'entertainment'
     },
+
   ];
 
   // Get unique categories for filter buttons
