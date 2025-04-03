@@ -15,6 +15,8 @@ import BlogList from './components/BlogList';
 import AuthPage from './components/AuthPage';
 import ProfilePage from './components/ProfilePage';
 import FeedbackForm from './components/Feedback';
+import Events from './components/Events';
+import Feature from './components/Feature';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path="/project" element={<ProjectsGrid />} />
             <Route path="/proposals" element={<ProjectProposals />} />
             <Route path="/profile/:id" element={<MemberProfile />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/feature" element={<Feature />} />
           </Routes>
         </main>
         <Footer />

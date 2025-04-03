@@ -42,23 +42,51 @@ const AboutUs = () => {
         {
             name: 'Jivan Jamdar',
             role: 'Club Co-ordinator',
-            image: 'https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg',
+            image: 'https://media.licdn.com/dms/image/v2/D5603AQHjs4EbHJVNoQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1723965089206?e=1747267200&v=beta&t=btdC_4WtIdgFaeR5rRp3kxCQd7i7c-yJZkGKhddSk_k',
             github: 'https://github.com/Jivan052',
             linkedin: 'https://www.linkedin.com/in/jivan-jamdar/'
         },
         {
+            name: 'Arjun Mishra',
+            role: 'General Manager',
+            image: 'https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg',
+            github: 'https://github.com/arjunmishraaa',
+            linkedin: 'https://www.linkedin.com/in/arjunmishraaa-/'
+        },
+        {
             name: 'Durgesh Shukla',
             role: 'Community Manager',
-            image: 'https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg',
-            github: 'https://github.com/durgesh',
+            image: 'https://media.licdn.com/dms/image/v2/D4D03AQF4sFztSzSyJQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1725894738632?e=1747267200&v=beta&t=I6L_r4640d7LfqUXNhkV4HUtk7latYtQ2ccTgio7us4',
+            github: 'https://github.com/durgeshshukla18',
             linkedin: 'https://linkedin.com/in/durgesh'
         },
         {
-            name: 'John Doe',
-            role: 'Technical Lead',
-            image: 'https://i.pinimg.com/736x/12/44/a8/1244a868b7f3d46894b2d690f1c0ddd4.jpg',
-            github: 'https://github.com/johndoe',
-            linkedin: 'https://linkedin.com/in/johndoe'
+            name: 'Kathikeya Bendi',
+            role: 'Core Team Member',
+            image: 'https://media.licdn.com/dms/image/v2/D5603AQGi28d_o7okyw/profile-displayphoto-shrink_400_400/B56ZR69tshGoAg-/0/1737229786606?e=1747267200&v=beta&t=GgJXcYR9xMTNaCoHzWuHJZSmqvBK9NeWfp-9tfSNaVQ',
+            github: 'https://github.com/bendikarthikeya',
+            linkedin: 'https://www.linkedin.com/in/karthikeyabendi/'
+        },
+        {
+            name: 'Allan Joseph',
+            role: 'Core Team Member',
+            image: 'https://media.licdn.com/dms/image/v2/D4D03AQHvCSm5yY_aUQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1700297739139?e=1747267200&v=beta&t=JPl1xoY7mSeZjqdS3xz9WYWKIVIbtAx1m3sjvTNL_8Q',
+            github: 'https://github.com/allanjoseph01',
+            linkedin: 'https://www.linkedin.com/in/allan-santosh-joseph/'
+        },
+        {
+            name: 'Najma Khatun',
+            role: 'Core Team Member',
+            image: 'https://media.licdn.com/dms/image/v2/D5603AQEyXCCvbjcJLQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1725130094832?e=1747267200&v=beta&t=Xw16WvA1CZXJeZDWgKpfMxuqqjnyoDjHDWJrUJmuiyw',
+            github: 'https://github.com/Najma099',
+            linkedin: 'https://www.linkedin.com/in/najma-khatun/'
+        },
+        {
+            name: 'Mithesh Agrawal',
+            role: 'Core Team Member',
+            image: 'https://media.licdn.com/dms/image/v2/D4D35AQHrPN1YVrlJeA/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1738944901437?e=1742587200&v=beta&t=TyBu-B0glv9aBZ6ntGzpdbm9yJET3dPvMDj4sBIYQtk',
+            github: 'https://github.com/orgs/OpenOct-Guild/people/Mitesh766',
+            linkedin: 'https://www.linkedin.com/in/mitesh-agrawal76/'
         },
 
     ];
