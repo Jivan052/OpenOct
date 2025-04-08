@@ -107,7 +107,7 @@ const upcomingEvents = [
     }
   },
   {
-    id: 1,
+    id: 4,
     title: "Hackathon: Build for Change",
     date: "June 15-16, 2025",
     time: "10:00 AM - 6:00 PM",
@@ -128,7 +128,7 @@ const upcomingEvents = [
 // Past events data
 const pastEvents = [
   {
-    id: 4,
+    id: 5,
     title: "Code for Good Hackathon",
     date: "December 10, 2024",
     description: "Over 200 participants created amazing projects to address social challenges. The winning team developed an accessible education platform.",
@@ -136,7 +136,7 @@ const pastEvents = [
     image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGhhY2thdGhvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60"
   },
   {
-    id: 5,
+    id: 6,
     title: "Web3 Developer Conference",
     date: "October 5, 2024",
     description: "Industry leaders shared insights on blockchain technology, decentralized applications, and the future of web development.",
@@ -247,78 +247,132 @@ const generateIcsFile = (event) => {
   document.body.removeChild(link);
 };
 
-// AddToCalendar component
+// Enhanced AddToCalendar component with beautiful effects
 const AddToCalendar = ({ event }) => {
   const [isOpen, setIsOpen] = useState(false);
   
   const handleGoogleCalendar = () => {
     window.open(generateGoogleCalendarUrl(event), '_blank');
     setIsOpen(false);
+    toast.success("Added to Google Calendar!", {
+      icon: '📅',
+      style: {
+        borderRadius: '10px',
+        background: '#4ade80',
+        color: '#fff',
+      },
+    });
   };
   
   const handleAppleCalendar = () => {
     generateIcsFile(event);
     setIsOpen(false);
+    toast.success("Added to Apple Calendar!", {
+      icon: '📆',
+      style: {
+        borderRadius: '10px',
+        background: '#4ade80',
+        color: '#fff',
+      },
+    });
   };
   
   const handleOutlookCalendar = () => {
     generateIcsFile(event);
     setIsOpen(false);
+    toast.success("Added to Outlook Calendar!", {
+      icon: '📅',
+      style: {
+        borderRadius: '10px',
+        background: '#4ade80',
+        color: '#fff',
+      },
+    });
   };
   
   const handleDownloadIcs = () => {
     generateIcsFile(event);
     setIsOpen(false);
+    toast.success("Calendar file downloaded!", {
+      icon: '💾',
+      style: {
+        borderRadius: '10px',
+        background: '#4ade80',
+        color: '#fff',
+      },
+    });
   };
   
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left group">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 text-sm text-gray-600 py-2 px-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+        className="flex items-center gap-2 text-sm py-2.5 px-4 rounded-lg bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 group-hover:ring-2 group-hover:ring-primary-300"
+        aria-expanded={isOpen}
+        aria-haspopup="true"
       >
-        <FaCalendarPlus />
+        <FaCalendarPlus className="text-lg transition-transform duration-300 group-hover:rotate-12" />
         <span>Add to Calendar</span>
-        <FaChevronDown className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <FaChevronDown className={`transform transition-all duration-300 ${isOpen ? 'rotate-180' : 'group-hover:translate-y-0.5'}`} />
       </button>
       
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ type: "spring", bounce: 0.5 }}
+            className="absolute right-0 mt-3 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-black ring-opacity-5 z-50 overflow-hidden"
           >
-            <div className="py-1">
-              <button
-                onClick={handleGoogleCalendar}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <FaGoogle className="mr-3 text-red-500" />
-                Google Calendar
-              </button>
-              <button
-                onClick={handleAppleCalendar}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <FaApple className="mr-3 text-gray-700" />
-                Apple Calendar
-              </button>
-              <button
-                onClick={handleOutlookCalendar}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <FaMicrosoft className="mr-3 text-blue-500" />
-                Outlook Calendar
-              </button>
-              <button
-                onClick={handleDownloadIcs}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <FaDownload className="mr-3 text-gray-500" />
-                Download .ics File
-              </button>
+            <div className="py-2 divide-y divide-gray-100">
+              <div className="px-4 py-3 bg-gradient-to-r from-primary-50 to-primary-100">
+                <h3 className="text-primary-800 font-medium">Add "{event.title}" to:</h3>
+              </div>
+              
+              <div>
+                <button
+                  onClick={handleGoogleCalendar}
+                  className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 transition-colors duration-150"
+                >
+                  <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-red-100 text-red-500 transition-transform duration-300 hover:scale-110">
+                    <FaGoogle className="text-xl" />
+                  </span>
+                  <span className="font-medium">Google Calendar</span>
+                </button>
+                
+                <button
+                  onClick={handleAppleCalendar}
+                  className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 transition-colors duration-150"
+                >
+                  <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 transition-transform duration-300 hover:scale-110">
+                    <FaApple className="text-xl" />
+                  </span>
+                  <span className="font-medium">Apple Calendar</span>
+                </button>
+                
+                <button
+                  onClick={handleOutlookCalendar}
+                  className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 transition-colors duration-150"
+                >
+                  <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-blue-100 text-blue-500 transition-transform duration-300 hover:scale-110">
+                    <FaMicrosoft className="text-lg" />
+                  </span>
+                  <span className="font-medium">Outlook Calendar</span>
+                </button>
+              </div>
+              
+              <div>
+                <button
+                  onClick={handleDownloadIcs}
+                  className="flex items-center w-full px-4 py-3 text-sm font-medium text-primary-700 bg-primary-50 hover:bg-primary-100 transition-colors duration-150"
+                >
+                  <span className="w-8 h-8 mr-3 flex items-center justify-center rounded-full bg-primary-200 text-primary-700 animate-pulse">
+                    <FaDownload />
+                  </span>
+                  Download .ics File
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
@@ -327,178 +381,7 @@ const AddToCalendar = ({ event }) => {
   );
 };
 
-// Set Reminder component
-const SetReminder = ({ event }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [reminderTime, setReminderTime] = useState('1day');
-  const [email, setEmail] = useState('');
-  
-  const handleSetReminder = async (e) => {
-    e.preventDefault();
-    
-    // Request notification permission
-    const hasPermission = await requestNotificationPermission();
-    
-    if (hasPermission) {
-      // Store in localStorage for demo purposes
-      const reminders = JSON.parse(localStorage.getItem('eventReminders') || '[]');
-      const newReminder = {
-        eventId: event.id,
-        eventTitle: event.title,
-        eventDate: event.startDate.toString(),
-        reminderTime,
-        email,
-        createdAt: new Date().toString()
-      };
-      
-      reminders.push(newReminder);
-      localStorage.setItem('eventReminders', JSON.stringify(reminders));
-      
-      // Calculate notification time based on reminder setting
-      const eventTime = new Date(event.startDate).getTime();
-      let notificationTime;
-      
-      switch(reminderTime) {
-        case '1hour':
-          notificationTime = eventTime - (60 * 60 * 1000);
-          break;
-        case '3hours':
-          notificationTime = eventTime - (3 * 60 * 60 * 1000);
-          break;
-        case '1day':
-          notificationTime = eventTime - (24 * 60 * 60 * 1000);
-          break;
-        case '3days':
-          notificationTime = eventTime - (3 * 24 * 60 * 60 * 1000);
-          break;
-        case '1week':
-          notificationTime = eventTime - (7 * 24 * 60 * 60 * 1000);
-          break;
-        default:
-          notificationTime = eventTime - (24 * 60 * 60 * 1000); // Default to 1 day
-      }
-      
-      // Schedule notification
-      const now = Date.now();
-      if (notificationTime > now) {
-        // For demo, we'll just show a toast notification
-        // In a real app, this would schedule a push notification via the service worker
-        setTimeout(() => {
-          showNotification(
-            `Reminder: ${event.title}`, 
-            {
-              body: `Your event is coming up ${getReminderText()}!`,
-              icon: '/logo192.png',
-              badge: '/badge.png',
-              data: { eventId: event.id },
-              requireInteraction: true
-            }
-          );
-        }, notificationTime - now);
-      }
-      
-      toast.success(`Reminder set for ${event.title}! We'll remind you ${getReminderText()}.`);
-    } else {
-      toast.error('Permission denied. We need notification permission to send you reminders.');
-    }
-    
-    setShowModal(false);
-  };
-  
-  const getReminderText = () => {
-    switch(reminderTime) {
-      case '1hour': return '1 hour before the event';
-      case '3hours': return '3 hours before the event';
-      case '1day': return '1 day before the event';
-      case '3days': return '3 days before the event';
-      case '1week': return '1 week before the event';
-      default: return 'before the event';
-    }
-  };
-  
-  return (
-    <>
-      <button
-        onClick={() => setShowModal(true)}
-        className="flex items-center gap-2 text-sm text-gray-600 py-2 px-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-      >
-        <FaBell />
-        <span>Set Reminder</span>
-      </button>
-      
-      <AnimatePresence>
-        {showModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              className="bg-white rounded-xl p-6 max-w-md w-full"
-            >
-              <h3 className="text-xl font-bold mb-4">Set Reminder for {event.title}</h3>
-              
-              <form onSubmit={handleSetReminder}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Remind me:
-                  </label>
-                  <select
-                    value={reminderTime}
-                    onChange={(e) => setReminderTime(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="1hour">1 hour before</option>
-                    <option value="3hours">3 hours before</option>
-                    <option value="1day">1 day before</option>
-                    <option value="3days">3 days before</option>
-                    <option value="1week">1 week before</option>
-                  </select>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-gray-700 text-sm font-medium mb-2">
-                    Email address:
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    required
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-                
-                <div className="flex justify-end space-x-3">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
-                  >
-                    Set Reminder
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-};
-
-// Global Notification/Reminder Component
+// Global Notification Component
 const GlobalEventReminder = () => {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState('');
@@ -669,56 +552,8 @@ const Events = () => {
     
     checkForNewEvents();
     
-    // Function to check for reminders
-    const checkReminders = () => {
-      const reminders = JSON.parse(localStorage.getItem('eventReminders') || '[]');
-      const now = new Date();
-      
-      reminders.forEach(reminder => {
-        const eventDate = new Date(reminder.eventDate);
-        let reminderTime;
-        
-        switch(reminder.reminderTime) {
-          case '1hour':
-            reminderTime = new Date(eventDate.getTime() - (60 * 60 * 1000));
-            break;
-          case '3hours':
-            reminderTime = new Date(eventDate.getTime() - (3 * 60 * 60 * 1000));
-            break;
-          case '1day':
-            reminderTime = new Date(eventDate.getTime() - (24 * 60 * 60 * 1000));
-            break;
-          case '3days':
-            reminderTime = new Date(eventDate.getTime() - (3 * 24 * 60 * 60 * 1000));
-            break;
-          case '1week':
-            reminderTime = new Date(eventDate.getTime() - (7 * 24 * 60 * 60 * 1000));
-            break;
-          default:
-            reminderTime = new Date(eventDate.getTime() - (24 * 60 * 60 * 1000));
-        }
-        
-        // If it's time for the reminder and notification permission is granted
-        const timeDiff = Math.abs(reminderTime.getTime() - now.getTime());
-        if (timeDiff < (60 * 1000) && Notification.permission === 'granted') { // Within a minute
-          showNotification(
-            `Reminder: ${reminder.eventTitle}`,
-            {
-              body: `Your event is coming up soon!`,
-              icon: '/logo192.png',
-              badge: '/badge.png',
-              requireInteraction: true
-            }
-          );
-        }
-      });
-    };
-    
-    // Check for reminders every minute
-    const reminderInterval = setInterval(checkReminders, 60 * 1000);
-    
     return () => {
-      clearInterval(reminderInterval);
+      // Clean up function
     };
   }, [hasNotified]);
   
@@ -780,7 +615,7 @@ const Events = () => {
           
           <div className="flex items-center space-x-2 overflow-x-auto py-1 md:py-0">
             <span className="flex items-center text-gray-600 pr-2">
-              <FaFilter className="mr-2" /> Filter:
+              <FaFilter className="mr-2" />
             </span>
             
             <button
@@ -838,24 +673,24 @@ const Events = () => {
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
-          <div className="relative overflow-hidden rounded-xl shadow-xl">
+          <div className="relative overflow-hidden rounded-xl shadow-xl group hover:shadow-2xl transition-all duration-300">
             <div className="absolute top-4 left-4 z-10">
-              <span className="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-bold flex items-center">
+              <span className="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-bold flex items-center shadow-md">
                 <FaStar className="mr-1" /> Featured Event
               </span>
             </div>
             
             <div className="md:flex bg-white">
-              <div className="md:w-1/2 h-64 md:h-auto">
+              <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
                 <img 
                   src={filteredEvents[0].image} 
                   alt={filteredEvents[0].title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
               
               <div className="md:w-1/2 p-6 md:p-8">
-                <h2 className="text-2xl md:text-3xl font-bold mb-3">{filteredEvents[0].title}</h2>
+                <h2 className="text-2xl md:text-3xl font-bold mb-3 group-hover:text-primary-600 transition-colors">{filteredEvents[0].title}</h2>
                 
                 <div className="flex items-center mb-2 text-gray-600">
                   <FaCalendarAlt className="mr-2 text-primary-600" />
@@ -880,15 +715,13 @@ const Events = () => {
                       href={filteredEvents[0].eventLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors flex items-center"
+                      className="flex items-center px-4 py-2.5 bg-gray-700 text-white font-medium rounded-lg shadow hover:shadow-lg hover:bg-gray-800 transition-all duration-300 transform hover:-translate-y-0.5"
                     >
                       Learn More <FaExternalLinkAlt className="ml-2 text-xs" />
                     </a>
                   )}
                   
                   <AddToCalendar event={filteredEvents[0]} />
-                  
-                  <SetReminder event={filteredEvents[0]} />
                 </div>
               </div>
             </div>
@@ -904,13 +737,13 @@ const Events = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12"
       >
         {filteredEvents.slice(1).map((event, index) => (
-          <EventCardWrapper key={event.id} delay={`${0.2 * (index + 1)}s`}>
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+          <EventCardWrapper key={`${event.id}-${index}`} delay={`${0.2 * (index + 1)}s`}>
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col group">
               <div className="h-48 overflow-hidden relative">
                 <img 
                   src={event.image} 
                   alt={event.title}
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute top-3 right-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -923,7 +756,7 @@ const Events = () => {
                 </div>
               </div>
               <div className="p-6 flex-grow flex flex-col">
-                <h3 className="text-xl font-bold mb-3 text-gray-800">{event.title}</h3>
+                <h3 className="text-xl font-bold mb-3 text-gray-800 group-hover:text-primary-600 transition-colors">{event.title}</h3>
                 <div className="flex items-center mb-2 text-gray-600">
                   <FaCalendarAlt className="mr-2 text-primary-600" />
                   <span>{event.date}</span>
@@ -944,15 +777,14 @@ const Events = () => {
                       href={event.eventLink}
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="block w-full py-2 px-4 bg-primary-600 text-white text-center font-semibold rounded-md hover:bg-primary-700 transition-colors duration-300 flex items-center justify-center"
+                      className="block w-full py-2.5 px-4 bg-gray-700 text-white text-center font-semibold rounded-lg hover:bg-gray-800 shadow hover:shadow-lg transition-all duration-300 flex items-center justify-center transform hover:-translate-y-0.5"
                     >
                       Learn More <FaExternalLinkAlt className="ml-2 text-xs" />
                     </a>
                   )}
                   
-                  <div className="flex gap-2">
+                  <div className="flex justify-center">
                     <AddToCalendar event={event} />
-                    <SetReminder event={event} />
                   </div>
                 </div>
               </div>
@@ -966,11 +798,11 @@ const Events = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="mt-20 bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 text-white text-center"
+        className="mt-20 bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 text-white text-center shadow-xl"
       >
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Never Miss an Event</h2>
         <p className="mb-6 max-w-xl mx-auto">
-          Subscribe to receive notifications about new events and get reminders for upcoming hackathons, workshops, and tech talks.
+          Subscribe to receive notifications about new events and upcoming hackathons, workshops, and tech talks.
         </p>
         <form className="flex flex-col md:flex-row gap-4 max-w-lg mx-auto" onSubmit={async (e) => {
           e.preventDefault();
@@ -1008,12 +840,12 @@ const Events = () => {
             type="email"
             name="email"
             placeholder="Your email address"
-            className="flex-1 px-4 py-3 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-300"
+            className="flex-1 px-4 py-3 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-300 shadow-inner"
             required
           />
           <button
             type="submit"
-            className="px-6 py-3 bg-white text-primary-600 font-bold rounded-md hover:bg-gray-100 transition-colors duration-300"
+            className="px-6 py-3 bg-white text-primary-600 font-bold rounded-md hover:bg-gray-100 transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5"
           >
             Get Notified
           </button>
@@ -1031,22 +863,22 @@ const Events = () => {
               initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.0 + (index * 0.2), duration: 0.6 }}
-              className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+              className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group"
             >
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="md:w-1/3">
+                <div className="md:w-1/3 overflow-hidden rounded-lg">
                   <img 
                     src={event.image} 
                     alt={event.title}
-                    className="w-full h-32 object-cover rounded-lg"
+                    className="w-full h-32 object-cover transform transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="md:w-2/3">
                   <div className="text-sm text-gray-500 mb-2">{event.date}</div>
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors">{event.title}</h3>
                   <p className="text-gray-600 mb-4 line-clamp-3">{event.description}</p>
-                  <Link to={event.link} className="text-primary-600 font-semibold hover:underline flex items-center">
-                    View Highlights <span className="ml-1">→</span>
+                  <Link to={event.link} className="text-primary-600 font-semibold hover:underline flex items-center group">
+                    View Highlights <span className="ml-1 transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </Link>
                 </div>
               </div>
