@@ -4,57 +4,111 @@ import { auth, db } from '../firebase';
 import { getDocs, collection, onSnapshot } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { toast } from 'react-hot-toast';
-import { FaDownload, FaProjectDiagram, FaLightbulb, FaSignOutAlt, FaSync } from 'react-icons/fa';
-
+import { FaDownload, FaProjectDiagram, FaLightbulb, FaSignOutAlt, 
+  FaSync, FaDatabase, FaLink } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import DomainResource from '../Operations/DomainResource';
+import LinkResourceManagement from '../Operations/LinkResourceManagement';
 const ProfilePage = () => {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     projectCount: 0,
-    proposalCount: 0
+    proposalCount: 0,
+    resourceCount: 0,
+    linkCount: 0
   });
   const [refreshing, setRefreshing] = useState(false);
+  
+  const navigate = useNavigate();
 
   // Set up real-time listeners for stats
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     
+    // Set loading to true when the effect runs
     setLoading(true);
     
-    // Create real-time listeners for both collections
-    const projectsUnsubscribe = onSnapshot(collection(db, "projects"), 
+    // Track how many collections have finished loading
+    let loadedCollections = 0;
+    const totalCollections = 4; // projects, proposals, resources, links
+    
+    // Function to check if all collections are loaded
+    const checkAllLoaded = () => {
+      loadedCollections++;
+      if (loadedCollections === totalCollections) {
+        setLoading(false);
+      }
+    };
+    
+    // Create real-time listeners for projects
+    const projectsUnsubscribe = onSnapshot(
+      collection(db, "projects"), 
       (snapshot) => {
         setStats(prevStats => ({
           ...prevStats,
           projectCount: snapshot.size
         }));
-        
-        if (loading) {
-          setLoading(false);
-        }
+        checkAllLoaded();
       }, 
       (error) => {
         console.error("Error getting projects:", error);
         toast.error("Failed to get real-time projects updates");
-        setLoading(false);
+        checkAllLoaded();
       }
     );
     
-    const proposalsUnsubscribe = onSnapshot(collection(db, "proposals"), 
+    // Create real-time listeners for proposals
+    const proposalsUnsubscribe = onSnapshot(
+      collection(db, "proposals"), 
       (snapshot) => {
         setStats(prevStats => ({
           ...prevStats,
           proposalCount: snapshot.size
         }));
-        
-        if (loading) {
-          setLoading(false);
-        }
+        checkAllLoaded();
       }, 
       (error) => {
         console.error("Error getting proposals:", error);
         toast.error("Failed to get real-time proposals updates");
-        setLoading(false);
+        checkAllLoaded();
+      }
+    );
+    
+    // Add listener for domain resources
+    const resourcesUnsubscribe = onSnapshot(
+      collection(db, "domainResources"), 
+      (snapshot) => {
+        setStats(prevStats => ({
+          ...prevStats,
+          resourceCount: snapshot.size
+        }));
+        checkAllLoaded();
+      }, 
+      (error) => {
+        console.error("Error getting resources:", error);
+        toast.error("Failed to get real-time resources updates");
+        checkAllLoaded();
+      }
+    );
+    
+    // Add listener for link resources
+    const linksUnsubscribe = onSnapshot(
+      collection(db, "linkResources"), 
+      (snapshot) => {
+        setStats(prevStats => ({
+          ...prevStats,
+          linkCount: snapshot.size
+        }));
+        checkAllLoaded();
+      }, 
+      (error) => {
+        console.error("Error getting link resources:", error);
+        toast.error("Failed to get real-time link resources updates");
+        checkAllLoaded();
       }
     );
     
@@ -62,7 +116,10 @@ const ProfilePage = () => {
     return () => {
       projectsUnsubscribe();
       proposalsUnsubscribe();
+      resourcesUnsubscribe();
+      linksUnsubscribe();
     };
+    
   }, [user]);
 
   // Manual refresh function
@@ -80,9 +137,20 @@ const ProfilePage = () => {
       const proposalsSnapshot = await getDocs(collection(db, "proposals"));
       const proposalCount = proposalsSnapshot.size;
       
+      // Get resources count
+      const resourcesSnapshot = await getDocs(collection(db, "domainResources"));
+      const resourceCount = resourcesSnapshot.size;
+      
+      // Get link resources count
+      const linksSnapshot = await getDocs(collection(db, "linkResources"));
+      const linkCount = linksSnapshot.size;
+      
+      // Update all stats at once
       setStats({
         projectCount,
-        proposalCount
+        proposalCount,
+        resourceCount,
+        linkCount
       });
       
       toast.success("Statistics refreshed successfully");
@@ -141,6 +209,7 @@ const ProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      {/* Header with title and buttons */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
@@ -166,7 +235,8 @@ const ProfilePage = () => {
       </div>
       
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Projects Card */}
         <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
           <div className="flex items-center">
             <div className="p-3 bg-blue-100 rounded-full mr-4">
@@ -184,6 +254,7 @@ const ProfilePage = () => {
           <p className="text-xs text-gray-500 mt-2">Updates in real-time</p>
         </div>
         
+        {/* Proposals Card */}
         <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
           <div className="flex items-center">
             <div className="p-3 bg-green-100 rounded-full mr-4">
@@ -200,12 +271,49 @@ const ProfilePage = () => {
           </div>
           <p className="text-xs text-gray-500 mt-2">Updates in real-time</p>
         </div>
+        
+        {/* Domain Resources Card */}
+        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+          <div className="flex items-center">
+            <div className="p-3 bg-purple-100 rounded-full mr-4">
+              <FaDatabase className="text-purple-600 text-xl" />
+            </div>
+            <div>
+              <h2 className="text-gray-500 text-sm uppercase font-medium">Domain Resources</h2>
+              {loading ? (
+                <div className="h-7 w-16 bg-gray-200 rounded animate-pulse"></div>
+              ) : (
+                <p className="text-3xl font-bold text-gray-800">{stats.resourceCount}</p>
+              )}
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">Updates in real-time</p>
+        </div>
+        
+        {/* Link Resources Card */}
+        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500">
+          <div className="flex items-center">
+            <div className="p-3 bg-indigo-100 rounded-full mr-4">
+              <FaLink className="text-indigo-600 text-xl" />
+            </div>
+            <div>
+              <h2 className="text-gray-500 text-sm uppercase font-medium">Link Resources</h2>
+              {loading ? (
+                <div className="h-7 w-16 bg-gray-200 rounded animate-pulse"></div>
+              ) : (
+                <p className="text-3xl font-bold text-gray-800">{stats.linkCount}</p>
+              )}
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">Updates in real-time</p>
+        </div>
       </div>
       
       {/* Actions Section */}
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div className="bg-white rounded-xl shadow-md p-6 mb-6">
         <h2 className="text-xl font-bold mb-4">Admin Actions</h2>
         
+        {/* Export Data Section */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">Export Data</h3>
           <p className="text-gray-600 mb-4">
@@ -220,6 +328,13 @@ const ProfilePage = () => {
           </button>
         </div>
         
+        {/* Domain Resources Management Component */}
+        <DomainResource user={user} />
+        
+        {/* Link Resources Management Component */}
+        <LinkResourceManagement user={user} />
+        
+        {/* Quick Links Section */}
         <div className="border-t border-gray-200 pt-6">
           <h3 className="text-lg font-medium mb-2">Quick Links</h3>
           <div className="flex flex-wrap gap-4">
@@ -229,8 +344,11 @@ const ProfilePage = () => {
             <a href="/proposals" className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
               View All Proposals
             </a>
-            <a href="/profile" className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
-              Platform Settings
+            <a href="/opendomain" className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+              Domain Resources
+            </a>
+            <a href="/links" className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+              Open Source Links
             </a>
           </div>
         </div>

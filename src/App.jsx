@@ -21,6 +21,7 @@ import FeedbackForm from './components/Feedback';
 import Events from './components/Events';
 import Feature from './components/Feature';
 import Links from './pages/Links';
+import OpenDomain from './pages/OpenDomain';
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/feature" element={<Feature />} />
             <Route path="/links" element={<Links />} />
+            <Route path="/opendomain" element={<OpenDomain />} />
           </Routes>
         </main>
         <Footer />
