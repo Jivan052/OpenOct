@@ -64,7 +64,7 @@ const ProjectCard = ({ project }) => {
             href={project.demoUrl} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

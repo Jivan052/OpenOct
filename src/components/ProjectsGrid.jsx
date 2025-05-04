@@ -131,7 +131,7 @@ function ProjectsGrid() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl text-white p-8 mb-12">
+      <div className="bg-gradient-to-r from-primary-600 to-gray-800 rounded-xl text-white p-8 mb-12">
         <div className="max-w-3xl">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Project Showcase</h1>
           <p className="text-lg opacity-90 mb-8">
@@ -164,7 +164,7 @@ function ProjectsGrid() {
               key={category}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === category 
-                ? 'bg-blue-600 text-white shadow-md' 
+                ? 'bg-primary-600 text-white shadow-md' 
                 : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
               }`}
               onClick={() => setFilter(category)}
@@ -225,7 +225,7 @@ function ProjectsGrid() {
               <button
                 onClick={loadMoreProjects}
                 disabled={loadingMore}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center mx-auto"
+                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center mx-auto"
               >
                 {loadingMore ? (
                   <>
@@ -255,7 +255,7 @@ function ProjectsGrid() {
           <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
           <button 
             onClick={() => {setFilter('all'); setSearchTerm('');}}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
             Reset Filters
           </button>
