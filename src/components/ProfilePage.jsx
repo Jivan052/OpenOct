@@ -9,6 +9,8 @@ import { FaDownload, FaProjectDiagram, FaLightbulb, FaSignOutAlt,
 import { useNavigate } from 'react-router-dom';
 import DomainResource from '../Operations/DomainResource';
 import LinkResourceManagement from '../Operations/LinkResourceManagement';
+import ProjectManagement from '../Operations/ProjectManagement';
+
 const ProfilePage = () => {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,7 @@ const ProfilePage = () => {
     
     // Set loading to true when the effect runs
     setLoading(true);
+    console.log('Setting up Firebase listeners');
     
     // Track how many collections have finished loading
     let loadedCollections = 0;
@@ -39,86 +42,98 @@ const ProfilePage = () => {
     // Function to check if all collections are loaded
     const checkAllLoaded = () => {
       loadedCollections++;
+      console.log(`Collection loaded: ${loadedCollections}/${totalCollections}`);
       if (loadedCollections === totalCollections) {
         setLoading(false);
       }
     };
-    
-    // Create real-time listeners for projects
-    const projectsUnsubscribe = onSnapshot(
-      collection(db, "projects"), 
-      (snapshot) => {
-        setStats(prevStats => ({
-          ...prevStats,
-          projectCount: snapshot.size
-        }));
-        checkAllLoaded();
-      }, 
-      (error) => {
-        console.error("Error getting projects:", error);
-        toast.error("Failed to get real-time projects updates");
-        checkAllLoaded();
-      }
-    );
-    
-    // Create real-time listeners for proposals
-    const proposalsUnsubscribe = onSnapshot(
-      collection(db, "proposals"), 
-      (snapshot) => {
-        setStats(prevStats => ({
-          ...prevStats,
-          proposalCount: snapshot.size
-        }));
-        checkAllLoaded();
-      }, 
-      (error) => {
-        console.error("Error getting proposals:", error);
-        toast.error("Failed to get real-time proposals updates");
-        checkAllLoaded();
-      }
-    );
-    
-    // Add listener for domain resources
-    const resourcesUnsubscribe = onSnapshot(
-      collection(db, "domainResources"), 
-      (snapshot) => {
-        setStats(prevStats => ({
-          ...prevStats,
-          resourceCount: snapshot.size
-        }));
-        checkAllLoaded();
-      }, 
-      (error) => {
-        console.error("Error getting resources:", error);
-        toast.error("Failed to get real-time resources updates");
-        checkAllLoaded();
-      }
-    );
-    
-    // Add listener for link resources
-    const linksUnsubscribe = onSnapshot(
-      collection(db, "linkResources"), 
-      (snapshot) => {
-        setStats(prevStats => ({
-          ...prevStats,
-          linkCount: snapshot.size
-        }));
-        checkAllLoaded();
-      }, 
-      (error) => {
-        console.error("Error getting link resources:", error);
-        toast.error("Failed to get real-time link resources updates");
-        checkAllLoaded();
-      }
-    );
-    
-    // Clean up listeners when component unmounts
-    return () => {
-      projectsUnsubscribe();
-      proposalsUnsubscribe();
-      resourcesUnsubscribe();
-      linksUnsubscribe();
-    };
+
+    try {
+      // Create real-time listeners for projects
+      const projectsUnsubscribe = onSnapshot(
+        collection(db, "projects"), 
+        (snapshot) => {
+          console.log(`Projects count: ${snapshot.size}`);
+          setStats(prevStats => ({
+            ...prevStats,
+            projectCount: snapshot.size
+          }));
+          checkAllLoaded();
+        }, 
+        (error) => {
+          console.error("Error getting projects:", error);
+          toast.error("Failed to get real-time projects updates");
+          checkAllLoaded();
+        }
+      );
+      
+      // Create real-time listeners for proposals
+      const proposalsUnsubscribe = onSnapshot(
+        collection(db, "proposals"), 
+        (snapshot) => {
+          console.log(`Proposals count: ${snapshot.size}`);
+          setStats(prevStats => ({
+            ...prevStats,
+            proposalCount: snapshot.size
+          }));
+          checkAllLoaded();
+        }, 
+        (error) => {
+          console.error("Error getting proposals:", error);
+          toast.error("Failed to get real-time proposals updates");
+          checkAllLoaded();
+        }
+      );
+      
+      // Add listener for domain resources
+      const resourcesUnsubscribe = onSnapshot(
+        collection(db, "domainResources"), 
+        (snapshot) => {
+          console.log(`Domain resources count: ${snapshot.size}`);
+          setStats(prevStats => ({
+            ...prevStats,
+            resourceCount: snapshot.size
+          }));
+          checkAllLoaded();
+        }, 
+        (error) => {
+          console.error("Error getting resources:", error);
+          toast.error("Failed to get real-time resources updates");
+          checkAllLoaded();
+        }
+      );
+      
+      // Add listener for link resources
+      const linksUnsubscribe = onSnapshot(
+        collection(db, "linkResources"), 
+        (snapshot) => {
+          console.log(`Link resources count: ${snapshot.size}`);
+          setStats(prevStats => ({
+            ...prevStats,
+            linkCount: snapshot.size
+          }));
+          checkAllLoaded();
+        }, 
+        (error) => {
+          console.error("Error getting link resources:", error);
+          toast.error("Failed to get real-time link resources updates");
+          checkAllLoaded();
+        }
+      );
+      
+      // Clean up listeners when component unmounts
+      return () => {
+        console.log("Cleaning up listeners");
+        projectsUnsubscribe();
+        proposalsUnsubscribe();
+        resourcesUnsubscribe();
+        linksUnsubscribe();
+      };
+    } catch (error) {
+      console.error("Error in effect:", error);
+      setLoading(false);
+      toast.error("Failed to load dashboard data");
+    }
     
   }, [user]);
 
@@ -197,6 +212,24 @@ const ProfilePage = () => {
     toast.success('Logged out successfully');
   };
 
+  // Check if any of the required components are missing
+  const ensureComponentExists = (Component, name) => {
+    try {
+      return Component ? <Component user={user} /> : (
+        <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+          Component {name} is missing or failed to load.
+        </div>
+      );
+    } catch (error) {
+      console.error(`Error rendering ${name}:`, error);
+      return (
+        <div className="p-4 bg-red-50 text-red-700 rounded-lg">
+          Error rendering {name} component: {error.message}
+        </div>
+      );
+    }
+  };
+
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -206,6 +239,8 @@ const ProfilePage = () => {
       </div>
     );
   }
+
+  console.log("Rendering ProfilePage user interface");
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -321,18 +356,16 @@ const ProfilePage = () => {
           </p>
           <button 
             onClick={downloadExcel} 
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center"
+            className="px-6 py-3 bg-green-200 text-black rounded-lg hover:bg-green-300 flex items-center"
           >
             <FaDownload className="mr-2" />
-            Download Projects Excel
           </button>
         </div>
         
-        {/* Domain Resources Management Component */}
-        <DomainResource user={user} />
-        
-        {/* Link Resources Management Component */}
-        <LinkResourceManagement user={user} />
+        {/* Use error boundaries for management components */}
+        {ensureComponentExists(ProjectManagement, "Project Management")}
+        {ensureComponentExists(DomainResource, "Domain Resource Management")}
+        {ensureComponentExists(LinkResourceManagement, "Link Resource Management")}
         
         {/* Quick Links Section */}
         <div className="border-t border-gray-200 pt-6">

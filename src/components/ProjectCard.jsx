@@ -64,7 +64,7 @@ const ProjectCard = ({ project }) => {
             href={project.demoUrl} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -75,14 +75,14 @@ const ProjectCard = ({ project }) => {
 
         {/* Simplified Contributors Section without hover effects */}
         <div className="flex items-center text-sm text-gray-600">
-          <div className="bg-primary-50 p-1.5 rounded-full mr-2">
-            <FaUsers className="text-primary-600" />
+          <div className="bg-blue-50 p-1.5 rounded-full mr-2">
+            <FaUsers className="text-blue-600" />
           </div>
           <div className="flex flex-wrap items-center">
             <span className="mr-1 font-medium"></span>
             {project.contributors && project.contributors.map((contributor, index) => (
               <span key={index} className="inline-flex items-center">
-                <span className="bg-primary-100 text-primary-800 px-2 py-1 rounded-full text-xs font-medium mr-1 mb-1">
+                <span className="bg-blue-100 text-primary-800 px-2 py-1 rounded-full text-xs font-medium mr-1 mb-1">
                   {contributor}
                 </span>
                 {index < project.contributors.length - 1 && index < 2 && (

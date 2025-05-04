@@ -4,6 +4,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { IoMdAddCircle } from "react-icons/io";
 
 const LinkResourceManagement = ({ user }) => {
   const [showLinkForm, setShowLinkForm] = useState(false);
@@ -74,19 +75,19 @@ const LinkResourceManagement = ({ user }) => {
 return (
     <>
         <div className="border-t border-gray-200 pt-6 mb-6">
-            <h3 className="text-lg font-medium mb-2">Open Source Links Management</h3>
-            <span className="font-medium text-red-600 text-sm">Only OS Club Core members</span>
+            <h3 className="text-lg font-medium mb-2">Open Source Links Management <span className="font-medium text-red-600 text-sm">(Only OS Club Core members)</span></h3> 
             <p className="text-gray-600 mb-4">
                 Add or manage open source links displayed on the resources page.
             </p>
             <div className="flex flex-wrap gap-3">
                 <button 
                     onClick={() => setShowLinkForm(true)} 
-                    className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
-                >
-                    <FaPlus className="mr-2" />
-                    Add New Link
-                </button>
+                    className='px-6 py-2 bg-primary-100 text-black rounded-lg hover:bg-blue-300 flex items-center'
+          >
+             
+                        <IoMdAddCircle class="text-500 mr-2"/>
+                         Add
+                 </button>
                 <button 
                     onClick={viewLinksPage} 
                     className="px-6 py-3 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 flex items-center"

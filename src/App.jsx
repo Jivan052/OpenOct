@@ -71,6 +71,7 @@ function App() {
             <Route path="/feature" element={<Feature />} />
             <Route path="/links" element={<Links />} />
             <Route path="/opendomain" element={<OpenDomain />} />
+
           </Routes>
         </main>
         <Footer />
