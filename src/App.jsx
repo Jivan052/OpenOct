@@ -22,6 +22,7 @@ import Events from './components/Events';
 import Feature from './components/Feature';
 import Links from './pages/Links';
 import OpenDomain from './pages/OpenDomain';
+import RecognitionPage from './pages/RecognitionPage';
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
             <Route path="/feature" element={<Feature />} />
             <Route path="/links" element={<Links />} />
             <Route path="/opendomain" element={<OpenDomain />} />
+            <Route path="/recognition" element={<RecognitionPage />} />
 
           </Routes>
         </main>
