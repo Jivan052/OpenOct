@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import DomainResource from '../Operations/DomainResource';
 import LinkResourceManagement from '../Operations/LinkResourceManagement';
 import ProjectManagement from '../Operations/ProjectManagement';
+import InfoCardManager from '../Operations/InforCardManagement';
 
 const ProfilePage = () => {
   const [user] = useAuthState(auth);
@@ -244,6 +245,12 @@ const ProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+
+
+<div className="mt-10">
+                <h2 className="text-2xl font-bold mb-6">InfoCard Management</h2>
+                    <InfoCardManager />
+                    </div>
       {/* Header with title and buttons */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
