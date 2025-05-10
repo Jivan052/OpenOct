@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { FaChevronDown, FaChevronUp, FaPuzzlePiece, FaHistory, FaExternalLinkSquareAlt } from 'react-icons/fa';
-import QuizCard from '../reusables/Quizcard';
+import QuizCard from '../reusables/QuizCard';
 
 const QuizPage = () => {
   const [activeQuizzes, setActiveQuizzes] = useState([]);
