@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { FaChevronDown, FaChevronUp, FaPuzzlePiece, FaHistory } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaPuzzlePiece, FaHistory, FaExternalLinkSquareAlt } from 'react-icons/fa';
 import QuizCard from '../reusables/Quizcard';
 
 const QuizPage = () => {
@@ -107,12 +107,21 @@ const QuizPage = () => {
               
               {/* Past Quizzes */}
               <section>
+          
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center">
                     <FaHistory className="text-gray-500 mr-2" />
-                    <h2 className="text-2xl font-semibold text-gray-800">Past Quizzes</h2>
+                    <h2 className="text-2xl font-semibold text-blue-800">
+                         <a 
+                             href="https://pastquizzes.example.com" 
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             className="flex items-center hover:underline"
+                         >
+                         Past Quizzes <FaExternalLinkSquareAlt className="ml-1.5 text-sm" />
+                         </a>
+                     </h2>
                   </div>
-                  
                   {pastQuizzes.length > 3 && (
                     <button 
                       onClick={() => setShowAllPast(!showAllPast)}
