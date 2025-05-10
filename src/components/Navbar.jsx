@@ -47,7 +47,7 @@ const Navbar = () => {
     { to: "/blog", label: "Resources" },
     { to: "/events", label: "Events" },
     { to: "/recognition", label: "Recognition" },
-    { to: "/Quiz", label: "Quiz" },
+    { to: "/Quiz", label: "Compete" },
   ];
 
   const isActive = (path) => location.pathname === path;
