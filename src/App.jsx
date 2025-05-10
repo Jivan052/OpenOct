@@ -23,7 +23,7 @@ import Feature from './components/Feature';
 import Links from './pages/Links';
 import OpenDomain from './pages/OpenDomain';
 import RecognitionPage from './pages/RecognitionPage';
-
+import QuizPage from './pages/QuizPage';
 
 function App() {
   // timer state
@@ -73,7 +73,7 @@ function App() {
             <Route path="/links" element={<Links />} />
             <Route path="/opendomain" element={<OpenDomain />} />
             <Route path="/recognition" element={<RecognitionPage />} />
-
+            <Route path="/quiz" element={<QuizPage />} />
           </Routes>
         </main>
         <Footer />

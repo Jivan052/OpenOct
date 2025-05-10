@@ -1,297 +1,337 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaTrophy, FaStar, FaMedal, FaCode, FaTools, FaCalendarAlt, FaChevronRight } from 'react-icons/fa';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { toast } from 'react-hot-toast';
+import { FaTrophy, FaUserAlt, FaTools, FaCode, FaProjectDiagram, FaPuzzlePiece, 
+  FaUsers, FaExternalLinkAlt, FaAward, FaStar, FaMedal, FaChevronRight } from 'react-icons/fa';
 
-const Recognition = () => {
+const RecognitionPage = () => {
+  const [awards, setAwards] = useState({});
   const [loading, setLoading] = useState(true);
-  const [awards, setAwards] = useState([]);
-  const [selectedPeriod, setSelectedPeriod] = useState('current');
+  const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
 
-  // Sample data - Replace with Firebase fetch when ready
-  const sampleAwards = {
-    current: [
-      {
-        id: 'award1',
-        title: 'Contributor of the Week',
-        recipient: 'Sarah Johnson',
-        description: 'For outstanding contributions to the documentation project and helping 12 new contributors get started.',
-        date: 'May 1, 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=1',
-        icon: <FaStar className="text-yellow-500" />
-      },
-      {
-        id: 'award2',
-        title: 'Developer of the Month',
-        recipient: 'Michael Chen',
-        description: 'For implementing the new search feature that improved performance by 40% and fixing 7 critical bugs.',
-        date: 'April 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=3',
-        icon: <FaCode className="text-blue-500" />
-      },
-      {
-        id: 'award3',
-        title: 'Quiz Champion',
-        recipient: 'Alex Rodriguez',
-        description: 'For achieving the highest score in our JavaScript Advanced Concepts quiz with a perfect score.',
-        date: 'May 3, 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=4',
-        icon: <FaTrophy className="text-amber-500" />
-      },
-      {
-        id: 'award4',
-        title: 'Conflict Resolver of the Week',
-        recipient: 'Priya Patel',
-        description: 'For mediating and finding consensus in the API design discussion, leading to a better solution.',
-        date: 'May 1, 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=5',
-        icon: <FaMedal className="text-purple-500" />
-      },
-      {
-        id: 'award5',
-        title: 'Maintainer of the Month',
-        recipient: 'James Wilson',
-        description: 'For exceptional project maintenance, reviewing 45 PRs, and mentoring 8 new contributors.',
-        date: 'April 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=7',
-        icon: <FaTools className="text-green-500" />
-      }
-    ],
-    past: [
-      {
-        id: 'past1',
-        title: 'Contributor of the Week',
-        recipient: 'Emma Davis',
-        description: 'For implementing the new authentication system and writing comprehensive tests.',
-        date: 'April 24, 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=9',
-        icon: <FaStar className="text-yellow-500" />
-      },
-      {
-        id: 'past2',
-        title: 'Developer of the Month',
-        recipient: 'Daniel Kim',
-        description: 'For leading the migration to the new frontend framework and training the team.',
-        date: 'March 2025',
-        imageUrl: 'https://i.pravatar.cc/300?img=11',
-        icon: <FaCode className="text-blue-500" />
-      },
-      // Add more past awards as needed
-    ]
-  };
-
-  // Simulate fetching from Firebase (replace with actual fetch)
   useEffect(() => {
-    const fetchAwards = async () => {
+    const fetchRecognitions = async () => {
       setLoading(true);
       try {
-        // Uncomment when ready to fetch from Firebase
-        // const awardsRef = collection(db, "recognition");
-        // const awardsQuery = query(awardsRef, orderBy("date", "desc"));
-        // const snapshot = await getDocs(awardsQuery);
-        // const awardsList = snapshot.docs.map(doc => ({
-        //   id: doc.id,
-        //   ...doc.data()
-        // }));
+        // Get all recognitions
+        const recognitionsSnapshot = await getDocs(collection(db, "recognitions"));
         
-        // For now, use sample data
-        setTimeout(() => {
-          setAwards(sampleAwards);
-          setLoading(false);
-        }, 800);
+        // Group by category
+        const awardsByCategory = {};
         
-      } catch (error) {
-        console.error("Error fetching awards:", error);
-        toast.error("Failed to load recognition data");
+        recognitionsSnapshot.forEach(doc => {
+          const data = doc.data();
+          awardsByCategory[data.category] = {
+            id: doc.id,
+            ...data
+          };
+        });
+        
+        setAwards(awardsByCategory);
+
+        // Set first award as active for mobile view
+        const firstAward = Object.keys(awardsByCategory)[0];
+        if (firstAward && window.innerWidth < 768) {
+          setActiveCategory(firstAward);
+        }
+      } catch (err) {
+        console.error("Error fetching recognitions:", err);
+        setError("Failed to load recognition data");
+      } finally {
         setLoading(false);
       }
     };
     
-    fetchAwards();
+    fetchRecognitions();
   }, []);
+  
+  const recognitionCategories = [
+    {
+      id: 'contributor',
+      title: 'Contributor of the Month',
+      icon: <FaUserAlt className="text-yellow-800" />,
+      color: 'bg-yellow-500',
+      gradient: 'from-yellow-400 to-yellow-800',
+      description: 'Awarded to individuals who have made exceptional open-source contributions.'
+    },
+    {
+      id: 'maintainer',
+      title: 'Maintainer of the Month',
+      icon: <FaTools className="text-blue-800" />,
+      color: 'bg-blue-500',
+      gradient: 'from-blue-400 to-blue-800',
+      description: 'Recognizes excellence in project maintenance and community support.'
+    },
+    {
+      id: 'developer',
+      title: 'Developer of the Month',
+      icon: <FaCode className="text-green-800" />,
+      color: 'bg-green-500',
+      gradient: 'from-green-400 to-green-800',
+      description: 'Celebrates exceptional technical skills and code quality.'
+    },
+    {
+      id: 'project',
+      title: 'Project of the Month',
+      icon: <FaProjectDiagram className="text-purple-800" />,
+      color: 'bg-purple-500',
+      gradient: 'from-purple-400 to-purple-800',
+      description: 'Showcases innovative and impactful open-source projects.'
+    },
+    {
+      id: 'quiz',
+      title: 'Quiz Conqueror of the Month',
+      icon: <FaPuzzlePiece className="text-red-800" />,
+      color: 'bg-red-500',
+      gradient: 'from-red-400 to-red-800',
+      description: 'Awarded to top performers in our monthly coding quizzes.'
+    },
+    {
+      id: 'member',
+      title: 'Club Member of the Month',
+      icon: <FaUsers className="text-indigo-800" />,
+      color: 'bg-indigo-500',
+      gradient: 'from-indigo-400 to-indigo-800',
+      description: 'Recognizes overall contribution and engagement within the community.'
+    }
+  ];
 
-  // Get the active awards list based on selected period
-  const activeAwards = awards[selectedPeriod] || [];
+  const formatDate = (timestamp) => {
+    if (!timestamp) return '';
+    
+    try {
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      return date.toLocaleDateString('en-US', { 
+        month: 'long', 
+        year: 'numeric' 
+      });
+    } catch (err) {
+      return '';
+    }
+  };
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl text-white p-8 mb-12">
-        <div className="max-w-3xl">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Community Recognition</h1>
-          <p className="text-lg opacity-90 mb-6">
-            Celebrating our amazing community members who go above and beyond 
-            with their contributions, leadership, and support.
-          </p>
-          <div className="inline-flex bg-blue-700 rounded-lg p-1">
-            <button
-              className={`px-4 py-2 rounded-md ${selectedPeriod === 'current' 
-                ? 'bg-white text-blue-600' 
-                : 'text-white hover:bg-blue-800'}`}
-              onClick={() => setSelectedPeriod('current')}
-            >
-              Current Awards
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md ${selectedPeriod === 'past' 
-                ? 'bg-white text-blue-600' 
-                : 'text-white hover:bg-blue-800'}`}
-              onClick={() => setSelectedPeriod('past')}
-            >
-              Past Awards
-            </button>
+  const AwardCard = ({ category, award, index }) => {
+    const catDetails = recognitionCategories.find(cat => cat.id === category);
+    
+    if (!catDetails) return null;
+
+    const isMobile = window.innerWidth < 768;
+    const isActive = activeCategory === category;
+    
+    return (
+      <motion.div 
+        className={`bg-white rounded-lg overflow-hidden shadow-md transition-all ${
+          isMobile && !isActive ? 'hidden' : ''
+        }`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.1 }}
+        whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}
+      >
+        <div className={`h-3 bg-gradient-to-r ${catDetails.gradient}`}></div>
+        <div className="p-6">
+          <div className="flex items-center mb-5">
+            <div className={`p-3 rounded-full ${catDetails.color.replace('bg-', 'bg-opacity-20 text-')}`}>
+              {catDetails.icon}
+            </div>
+            <h3 className="ml-3 font-bold text-lg text-gray-900">{catDetails.title}</h3>
           </div>
-        </div>
-      </div>
-
-      {/* Loading State */}
-      {loading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className="bg-white rounded-lg shadow h-36 animate-pulse">
-              <div className="p-6 flex">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mr-4"></div>
-                <div className="flex-1">
-                  <div className="h-4 w-1/3 bg-gray-200 rounded mb-3"></div>
-                  <div className="h-3 w-2/3 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-3 w-full bg-gray-200 rounded"></div>
+          
+          {award ? (
+            <div className="space-y-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  {award.photoUrl ? (
+                    <div className="relative">
+                      <img 
+                        src={award.photoUrl} 
+                        alt={award.name} 
+                        className="h-20 w-20 rounded-full object-cover border-2 border-gray-200 transition-transform hover:scale-105"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(award.name)}&size=80&background=random`;
+                        }}
+                      />
+                      <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-md">
+                        <FaMedal className={`text-${catDetails.color.split('-')[1]}`} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <div className="h-20 w-20 rounded-full bg-gray-100 flex items-center justify-center">
+                        <FaUserAlt className="text-gray-400 text-2xl" />
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-md">
+                        <FaMedal className={`text-${catDetails.color.split('-')[1]}`} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold text-xl">{award.name}</h4>
+                  {award.tagline && (
+                    <p className="text-sm text-gray-600">{award.tagline}</p>
+                  )}
+                  {award.updatedAt && (
+                    <div className="flex items-center mt-1">
+                      <FaAward className="text-xs text-gray-500 mr-1" />
+                      <p className="text-xs text-gray-500">{formatDate(award.updatedAt)}</p>
+                    </div>
+                  )}
                 </div>
               </div>
+              
+              {award.description && (
+                <div className="pt-2 pb-1">
+                  <p className="text-gray-700 leading-relaxed">{award.description}</p>
+                </div>
+              )}
+              
+              {award.links && award.links.length > 0 && (
+                <div className="pt-3 space-y-2">
+                  <h5 className="text-sm font-medium text-gray-700 uppercase tracking-wide">Links</h5>
+                  <div className="flex flex-wrap gap-2">
+                    {award.links.map((link, index) => (
+                      <a 
+                        key={index}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-800 transition-colors"
+                      >
+                        {link.label || `Link ${index + 1}`}
+                        <FaExternalLinkAlt className="ml-1 text-xs" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+          ) : (
+            <div className="text-center py-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100">
+                <FaStar className="text-gray-300 text-xl" />
+              </div>
+              <p className="mt-3 text-gray-500">No recipient selected yet.</p>
+              <p className="text-sm text-gray-400">Check back soon!</p>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    );
+  };
+
+  // For mobile view toggle
+  const CategoryPills = () => {
+    return (
+      <div className="md:hidden overflow-x-auto pb-2 mb-4">
+        <div className="flex space-x-2 min-w-max">
+          {recognitionCategories.map((category) => (
+            <button
+              key={category.id}
+              className={`px-4 py-2 rounded-full flex items-center whitespace-nowrap ${
+                activeCategory === category.id 
+                ? `bg-${category.color.split('-')[1]} text-white` 
+                : 'bg-gray-100 text-gray-700'
+              }`}
+              onClick={() => setActiveCategory(category.id)}
+            >
+              <span className="mr-1">{category.icon}</span>
+              <span>{category.title.split(' ')[0]}</span>
+            </button>
           ))}
         </div>
-      )}
-      
-      {/* Featured Award */}
-      {!loading && activeAwards.length > 0 && (
+      </div>
+    );
+  };
+
+  return (
+    <div className="bg-gray-50 min-h-screen py-12">
+      <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12"
+          className="text-center mb-12"
         >
-          <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <div className="md:flex">
-              <div className="md:shrink-0 md:w-1/3 relative">
-                <img 
-                  className="h-72 w-full object-cover md:h-full" 
-                  src={activeAwards[0].imageUrl} 
-                  alt={activeAwards[0].recipient} 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/300?text=Photo+Not+Available';
-                  }}
-                />
-                <div className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  Featured
-                </div>
-              </div>
-              <div className="p-8 md:flex-1 md:flex md:flex-col md:justify-between">
-                <div>
-                  <div className="flex items-center mb-3">
-                    <div className="p-2 bg-blue-100 rounded-full mr-3">
-                      {activeAwards[0].icon || <FaTrophy className="text-blue-600 text-xl" />}
-                    </div>
-                    <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">
-                      {activeAwards[0].title}
-                    </div>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3">{activeAwards[0].recipient}</h2>
-                  <p className="mt-2 text-gray-600 mb-6">
-                    {activeAwards[0].description}
-                  </p>
-                </div>
-                <div className="flex items-center mt-4">
-                  <FaCalendarAlt className="text-gray-400 mr-2" />
-                  <span className="text-sm text-gray-500">{activeAwards[0].date}</span>
-                </div>
+          <div className="inline-block">
+            <div className="flex items-center justify-center mb-4">
+              <div className="relative">
+                <FaTrophy className="text-yellow-500 text-5xl" />
+                <FaStar className="absolute -top-1 -right-1 text-yellow-400 text-sm" />
               </div>
             </div>
           </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Recognition Program</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Celebrating the outstanding contributions and achievements within our open source community
+          </p>
+          
+          <div className="mt-8">
+            <a 
+              href="https://github.com/OpenOct/hall-of-fame"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+            >
+              <FaTrophy className="mr-2" />
+              View Past Recognition Recipients
+              <FaChevronRight className="ml-2 text-xs" />
+            </a>
+          </div>
         </motion.div>
-      )}
-      
-      {/* Additional Awards */}
-      {!loading && activeAwards.length > 1 && (
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">More Recognitions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <AnimatePresence>
-              {activeAwards.slice(1).map((award, index) => (
-                <motion.div
-                  key={award.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="bg-white rounded-lg shadow overflow-hidden flex"
-                >
-                  <div className="p-5 flex">
-                    <div className="mr-4">
-                      <div className="h-16 w-16 rounded-full overflow-hidden">
-                        <img 
-                          src={award.imageUrl} 
-                          alt={award.recipient} 
-                          className="h-full w-full object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = 'https://via.placeholder.com/300?text=Photo';
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center mb-1">
-                        <div className="p-1 bg-blue-50 rounded-full mr-2">
-                          {award.icon || <FaTrophy className="text-blue-500" />}
-                        </div>
-                        <p className="text-sm text-gray-500 font-medium">{award.title}</p>
-                      </div>
-                      <h3 className="font-bold text-gray-800 mb-1">{award.recipient}</h3>
-                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">{award.description}</p>
-                      <div className="flex items-center text-xs text-gray-500">
-                        <FaCalendarAlt className="mr-1" />
-                        {award.date}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+
+        {loading ? (
+          <div className="flex flex-col justify-center items-center py-20">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-blue-600 font-medium">Loading recognitions...</p>
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 border border-red-200 text-red-800 p-6 rounded-lg text-center max-w-md mx-auto shadow-sm">
+            <div className="mb-3 text-red-500 text-2xl">
+              <span role="img" aria-label="Error">⚠️</span>
+            </div>
+            <h3 className="font-medium text-lg mb-2">Oops, something went wrong!</h3>
+            <p>{error}</p>
+          </div>
+        ) : (
+          <>
+            <CategoryPills />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {recognitionCategories.map((category, index) => (
+                <AwardCard 
+                  key={category.id}
+                  category={category.id}
+                  award={awards[category.id]}
+                  index={index}
+                />
               ))}
-            </AnimatePresence>
-          </div>
-        </div>
-      )}
-      
-      {/* No Awards Message */}
-      {!loading && activeAwards.length === 0 && (
-        <div className="text-center py-16 bg-gray-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No recognitions found</h3>
-          <p className="text-gray-600">Check back soon for new community recognitions</p>
-        </div>
-      )}
-      
-      {/* Nomination Section */}
-      <div className="mt-16 bg-gray-50 rounded-xl p-8 border border-gray-200">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <div className="mb-6 md:mb-0">
-            <h2 className="text-2xl font-bold mb-2">Know someone deserving recognition?</h2>
-            <p className="text-gray-600">
-              Nominate outstanding community members for their contributions and achievements.
-            </p>
-          </div>
-          <button
-            onClick={() => window.location.href = '/nominate'}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+            </div>
+          </>
+        )}
+
+        <motion.div 
+          className="text-center mt-16 py-8 border-t border-gray-200"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+        >
+          <p className="text-gray-600">
+            Want to nominate someone for next month's recognition?
+          </p>
+          <a 
+            href="mailto:nominations@openoct.org?subject=Award%20Nomination" 
+            className="inline-flex items-center mt-2 text-blue-600 hover:text-blue-800 font-medium"
           >
-            Nominate Someone
-            <FaChevronRight className="ml-2" />
-          </button>
-        </div>
+            Submit your nomination
+            <FaChevronRight className="ml-1 text-xs" />
+          </a>
+        </motion.div>
       </div>
     </div>
   );
 };
 
-export default Recognition;
+export default RecognitionPage;

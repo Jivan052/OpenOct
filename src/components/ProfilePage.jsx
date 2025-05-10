@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import DomainResource from '../Operations/DomainResource';
 import LinkResourceManagement from '../Operations/LinkResourceManagement';
 import ProjectManagement from '../Operations/ProjectManagement';
-import InfoCardManager from '../Operations/InforCardManagement';
+import QuizManagement from '../Operations/QuizManagement';
+import RecognitionManagement from '../Operations/RecognitionManagement';
 
 const ProfilePage = () => {
   const [user] = useAuthState(auth);
@@ -245,12 +246,6 @@ const ProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-
-
-<div className="mt-10">
-                <h2 className="text-2xl font-bold mb-6">InfoCard Management</h2>
-                    <InfoCardManager />
-                    </div>
       {/* Header with title and buttons */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
@@ -368,11 +363,19 @@ const ProfilePage = () => {
             <FaDownload className="mr-2" />
           </button>
         </div>
-        
-        {/* Use error boundaries for management components */}
+        <div className="mt-8">
+              <h2 className="text-2xl font-bold mb-4">Quiz Management</h2>
+            <QuizManagement />
+          </div>
+        <div className="mt-8">
+         <h2 className="text-2xl font-bold mb-4">Recognition Management</h2>
+           <RecognitionManagement />
+           </div>
+        {/* error boundaries for management components */}
         {ensureComponentExists(ProjectManagement, "Project Management")}
         {ensureComponentExists(DomainResource, "Domain Resource Management")}
         {ensureComponentExists(LinkResourceManagement, "Link Resource Management")}
+
         
         {/* Quick Links Section */}
         <div className="border-t border-gray-200 pt-6">

@@ -8,9 +8,7 @@ import { db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { toast } from 'react-hot-toast';
-import InfoCard from './InfoCard';
 
-// Define categories for filtering (without resources array - we'll fetch those from Firebase)
 const resourceCategories = [
   {
     id: 'programs',
@@ -329,7 +327,7 @@ const Links = () => {
               to="/blog" 
               className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
             >
-              Read related articles on our blog
+              Read related articles on our resources
               <FaArrowRight className="ml-2 text-xs" />
             </Link>
           </div>

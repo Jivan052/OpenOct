@@ -44,10 +44,10 @@ const Navbar = () => {
   const navLinks = [
     { to: "/project", label: "Projects" },
     { to: "/proposals", label: "Proposals" },
-    { to: "/blog", label: "Blogs" },
+    { to: "/blog", label: "Resources" },
     { to: "/events", label: "Events" },
-    { to: "/feature", label: "Idea" },
     { to: "/recognition", label: "Recognition" },
+    { to: "/Quiz", label: "Quiz" },
   ];
 
   const isActive = (path) => location.pathname === path;

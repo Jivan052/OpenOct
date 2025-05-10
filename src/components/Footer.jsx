@@ -24,8 +24,8 @@ function Footer() {
               <Link to="/about" className="hover:text-blue-400 transition-colors duration-200 text-sm sm:text-base">
                 About Us
               </Link>
-              <Link to="/about" className="hover:text-blue-400 transition-colors duration-200 text-sm sm:text-base">
-                Contact Us
+              <Link to="/feature" className="hover:text-blue-400 transition-colors duration-200 text-sm sm:text-base">
+                Idea
               </Link>
               <Link to="/feedback" className="hover:text-blue-400 transition-colors duration-200 text-sm sm:text-base">
                 Feedback
