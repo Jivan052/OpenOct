@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaCode, FaLaptopCode, FaCalendarAlt, FaBook, FaSearch,
+import { FaGithub, FaCode, FaLaptopCode, FaCalendarAlt, FaBook, FaSearch,
   FaArrowRight, FaExternalLinkAlt, FaChevronDown, FaShareAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { collection, getDocs  } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { toast } from 'react-hot-toast';
 
+// Define categories for filtering (without resources array - we'll fetch those from Firebase)
 const resourceCategories = [
   {
     id: 'programs',
@@ -133,12 +134,7 @@ const Links = () => {
   const hasMoreToLoad = displayCount < filteredResources.length;
   
   return (
-    
     <div className="min-h-screen bg-gray-50 py-8">
-         <div className="mb-10">
-              <h2 className="text-xl font-bold mb-4">Daily InfoCard</h2>
-                 <InfoCard />
-                        </div>
       <div className="max-w-5xl mx-auto px-4">
           <div className="flex flex-col items-center mb-8">
             <motion.h1 
@@ -327,7 +323,7 @@ const Links = () => {
               to="/blog" 
               className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
             >
-              Read related articles on our resources
+              Read related articles on our blog
               <FaArrowRight className="ml-2 text-xs" />
             </Link>
           </div>
