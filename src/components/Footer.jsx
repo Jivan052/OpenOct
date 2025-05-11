@@ -44,7 +44,7 @@ function Footer() {
                 <FaGithub className="text-2xl sm:text-3xl" />
               </a>
               <a 
-                href="https://discord.com" 
+                href="https://discord.gg/NPuuzyMb" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 aria-label="Discord Community"
