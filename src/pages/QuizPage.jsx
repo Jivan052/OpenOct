@@ -113,7 +113,7 @@ const QuizPage = () => {
                     <FaHistory className="text-gray-500 mr-2" />
                     <h2 className="text-2xl font-semibold text-blue-800">
                          <a 
-                             href="https://pastquizzes.example.com" 
+                             href="https://discord.gg/NPuuzyMb" 
                              target="_blank"
                              rel="noopener noreferrer"
                              className="flex items-center hover:underline"
