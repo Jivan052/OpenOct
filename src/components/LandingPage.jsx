@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
+import LatestFeaturesPopup from '../reusables/LatestFeaturePopUp';
 
 const LandingPage = () => {
   // Carousel slides data
@@ -73,6 +74,8 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen">
+
+      <LatestFeaturesPopup />
       {/* Hero Carousel */}
       <div className={`bg-gradient-to-r ${carouselSlides[currentSlide].bgClass} text-white rounded-lg relative`}>
         <div className="container mx-auto px-4 py-20">
