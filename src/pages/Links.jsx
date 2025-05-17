@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaCode, FaLaptopCode, FaCalendarAlt, FaBook, FaSearch,
+import {  FaCode, FaLaptopCode, FaCalendarAlt, FaBook, FaSearch,
   FaArrowRight, FaExternalLinkAlt, FaChevronDown, FaShareAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { toast } from 'react-hot-toast';
+import Navigate from '../reusables/Navigate';
 
 // Define categories for filtering (without resources array - we'll fetch those from Firebase)
 const resourceCategories = [
@@ -169,6 +170,12 @@ const Links = () => {
                 </p>
               </motion.div>
             )}
+
+            
+            <div className="px-4 py-3">
+                            <Navigate as={Link} to="/beginners-guide" className="w-full">
+                            </Navigate>
+            </div>
             
             {/* Search Bar */}
             <div className="relative w-full max-w-md">

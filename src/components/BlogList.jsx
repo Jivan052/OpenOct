@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import BlogCard from './BlogCard';
-import { FaLink, FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
+import Navigate from '../reusables/Navigate';
 
 
 
@@ -52,12 +53,16 @@ const BlogList = () => {
   ];
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header Section with Title and Button */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-10">
+    <div className="container mx-auto px-4 py-3">
+      <div className="flex flex-col md:flex-row justify-start items-center mb-10">
         <h1 className="text-3xl font-bold">Resources</h1>
       </div>
-      
+
+      <div className="px-1 py-2">
+        <Navigate as={Link} to="/beginners-guide" className="w-auto">
+        </Navigate>
+      </div>
+
       {/* Resource Banner */}
       <div className="bg-gradient-to-r from-green-50 to-indigo-50 rounded-xl p-6 mb-10 shadow-sm border border-blue-100">
         <div className="flex flex-col md:flex-row items-center justify-between">

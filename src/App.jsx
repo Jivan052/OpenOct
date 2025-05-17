@@ -24,6 +24,7 @@ import Links from './pages/Links';
 import OpenDomain from './pages/OpenDomain';
 import RecognitionPage from './pages/RecognitionPage';
 import QuizPage from './pages/QuizPage';
+import BeginnerGuide from './pages/BeginnerGuide';
 
 function App() {
   // timer state
@@ -74,6 +75,7 @@ function App() {
             <Route path="/opendomain" element={<OpenDomain />} />
             <Route path="/recognition" element={<RecognitionPage />} />
             <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/beginners-guide" element={<BeginnerGuide />} />
           </Routes>
         </main>
         <Footer />
